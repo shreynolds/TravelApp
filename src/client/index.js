@@ -1,5 +1,5 @@
-import {whenClick, kelvinToFarenheit, getWeather, retreiveData, postData} from './js/app.js'
+import {whenClick, kelvinToFarenheit, getPlaceInfo, retreiveData, postData, postPlaceData, getDateInfo, getWeatherInfo} from './js/app.js'
 
 import './styles/style.scss'
 
-export {whenClick, kelvinToFarenheit, getWeather, retreiveData, postData}
+export {whenClick, kelvinToFarenheit, getPlaceInfo, retreiveData, postData, postPlaceData, getDateInfo, getWeatherInfo}

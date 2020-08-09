@@ -1,3 +1,4 @@
+projectData = {}
 // Require Express to run server and routes
 const express = require('express');
 // Start up an instance of app
@@ -26,17 +27,27 @@ function send (req, res) {
 };
 
 //Post Route that adds the incoming data to projectData
-app.post('/add', addData);
+app.post('/addPlace', addPlaceData);
 
 //Function for the Post Route -- adding the data to projectData
-function addData(req, res){
+function addPlaceData(req, res){
     let data = req.body;
-	projectData["temp"] = data.temp;
-	projectData["feel"] = data.feelings;
-	projectData["date"] = data.date;
+	projectData["lat"] = data.lat;
+	projectData["long"] = data.long;
+    projectData["country"] = data.country;
+    projectData["city"] = data.city
     res.send({message: "POST received"});
 }
 
+app.post('/addDate', addDateData);
+
+function addDateData(req, res){
+    let data = req.body;
+	projectData["today"] = data.today;
+    projectData["tripDate"] = data.trip;
+    projectData["countdown"] = data.countdown
+    res.send({message: "POST received"});
+}
 
 // Setup Server
 const port = 3000;

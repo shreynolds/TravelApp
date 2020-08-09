@@ -2,33 +2,32 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Weather Journal</title>
-        <link href="https://fonts.googleapis.com/css?family=Oswald:400,600,700|Ranga:400,700&display=swap" rel="stylesheet">
+        <title> Travel App </title>
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <div id = "app">
             <div class ="holder headline">
-                <h1>Weather Journal App</h1>
+                <h1> Travel App</h1>
             </div>
-            <div class ="holder zip">
-                <label for="zip">Enter Zipcode here</label>
-                <input type="text" id="zip" placeholder="enter zip code here">
+            <div class ="holder place">
+                <label for="place">Where are you going? </label>
+                <input type="text" id="place" placeholder="enter destination here">
             </div>
-            <div class ="holder feel">
-                <label for="feelings">How are you feeling today?</label>
-                <textarea class= "myInput" id="feelings" placeholder="Enter your feelings here" rows="9" cols="50"></textarea>
+            <div class ="holder date">
+                <label for="feelings">What day are you leaving?</label>
+                <input type= "date" id="date" required pattern="\d{4}-\d{2}-\d{2}"></input>
                 <button id="generate" type = "submit" onclick = "return Client.whenClick()"> Generate </button>
             </div>
             <div class ="holder entry">
-                <div class = "title">Most Recent Entry</div>
+                <div class = "title">Your Upcoming Trip</div>
                 <div id = "entryHolder">
-                    <div id = "date"> </div> 
-                    <div id = "temp"> </div>
-                    <div id = "content"> </div>
+                    <div id = "location"> </div> 
+                    <div id = "departure"> </div>
+                    <div id = "countdown"> </div>
+                    <div id = "weather"> </div>
                 </div>
             </div>
         </div>
-        <script src="app.js" type="text/javascript"></script>
     </body>
 </html>
