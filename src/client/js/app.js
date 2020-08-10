@@ -6,6 +6,8 @@ const weatherbitForecastLink = 'https://api.weatherbit.io/v2.0/forecast/daily?un
 const weaterbitHistoryLink = 'http://api.weatherbit.io/v2.0/history/daily?units=I&'
 const weatherbitKey = '&key=0a157980943c4c6f97abaa81a20a174d'
 
+const pixabayLink = 'https://pixabay.com/api/?image_type=photo&q='
+const pixabayKey = '&key=17847818-c70cb11e4c9b27cb2b0bbea36'
 
 
 function whenClick(){
@@ -18,11 +20,46 @@ function whenClick(){
     })
     .then(getDateInfo)
     .then(getWeatherInfo)
+    .then(getPhoto)
     .then(retreiveData) 
     .then(function(){
         placeElement.value = "";
         dateElement.value = "";
     })
+}
+
+const getPhoto = async()=>{
+    console.log("in get photo")
+    const url = "/all";
+    const request = await fetch(url);
+    try{
+        const data = await(request.json())
+        let place = data.city
+        place = place.replace(' ', '+')
+        console.log(place)
+        let url2 = pixabayLink + place + pixabayKey
+        const result = await fetch(url2)
+        try{
+            const photos = await result.json()
+            console.log(photos)
+            let photoURL = ""
+            if (photos.hits.length != 0)
+            {
+                photoURL = photos.hits[0].webformatURL
+            }
+            else{
+                photoURL = "NA"
+            }
+            postData('/addImage', {imageURL: photoURL})
+                
+        }
+        catch (error){
+            console.log("error", error)
+        }
+    }
+    catch(error){
+        console.log('error', error)
+    }
 }
 
 const getWeatherInfo = async() =>{
@@ -60,14 +97,24 @@ const getWeatherInfo = async() =>{
         try{
             const dat = await res.json();
             console.log(dat);
-            if (difference < 0){
+            let description = ""
+            console.log(difference)
+            if (difference < 0 || difference > 15){
+                console.log("IN")
                 difference = 0
             }
+            console.log(difference)
             const weatherDay = dat.data[difference]
             console.log(weatherDay)
-            postData('/addWeather', {temp: weatherDay.temp, weather: weatherDay.weather.description})
+            try {
+                description = weatherDay.weather.description
+            }
+            catch{
+                description = "NA"
+            }
+            postData('/addWeather', {temp: weatherDay.temp, weather: description})
         } catch (error) {
-        console.log("error", error);
+            console.log("error", error);
         }
     } catch(error) {
         console.log("error", error);
@@ -132,23 +179,28 @@ const retreiveData = async()=>{
         let weatherString = ""
         if (count == 0) {
             countString = "You leave today!"
-            weatherString = "Today's weather is "
+            weatherString = "Today's weather is " + allData.weather + ", with an average temp of " + allData.temp + "°F"
         }
         else if (count > 0 && count < 16) {
             countString = count + " more days until you leave!"
-            weatherString = "The forecasted weather for your first day is "
+            weatherString = "The forecasted weather for your first day is " + allData.weather + ", with an average temp of " + allData.temp + "°F"
         }
-        else if (count > 0 && count >= 16) {
+        else if (count >= 16) {
             countString = count + " more days until you leave!"
-            weatherString = "The predicted weather for your first day is "
+            weatherString = "The predicted average temp for your first day is " + allData.temp + "°F"
         }
         else {
             countString = "This trip is in the past!"
-            weatherString = "The weather was "
+            weatherString = "The average temp was " + allData.temp + "°F"
         }
         console.log("here!!")
         document.getElementById('countdown').innerHTML = countString
-        document.getElementById('weather').innerHTML = weatherString + allData.weather + ", with an average temp of " + allData.temp
+        document.getElementById('weather').innerHTML = weatherString 
+        let imageURL = allData.imageURL
+        console.log(imageURL)
+        if (imageURL != "NA"){
+            document.getElementById('cityimg').src=imageURL
+        }
     } catch(error) {
         console.log("error", error);
     }
@@ -175,4 +227,4 @@ const postData = async (url = '', data = {}) =>{
     }
 };
 
-export {whenClick, kelvinToFarenheit, getPlaceInfo, retreiveData, postData, postPlaceData, getDateInfo, getWeatherInfo}
+export {whenClick, kelvinToFarenheit, getPlaceInfo, retreiveData, postData, postPlaceData, getDateInfo, getWeatherInfo, getPhoto}

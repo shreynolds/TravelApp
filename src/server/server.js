@@ -71,6 +71,14 @@ function addDateData(req, res){
     res.send({message: "POST received"});
 }
 
+app.post('/addImage', addImageData);
+
+function addImageData(req, res){
+    let data = req.body;
+    projectData['imageURL'] = data.imageURL
+    res.send({message: "POST received"});
+}
+
 // Setup Server
 const port = 3000;
 const server = app.listen(port, ()=>{
