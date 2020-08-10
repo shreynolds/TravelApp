@@ -14,6 +14,16 @@ app.use(bodyParser.json());
 const cors = require('cors');
 app.use(cors());
 
+const mockAPIResponse = require('./mockAPI.js')
+
+const fetch = require("node-fetch");
+
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+  });
+
 // Initialize the main project folder
 app.use(express.static('dist'));
 
@@ -25,6 +35,18 @@ app.get('/all', send);
 function send (req, res) {
     res.send(projectData);
 };
+
+
+app.post('/addWeather', addWeatherData)
+
+function addWeatherData(req, res){
+    let data = req.body
+    projectData['temp'] = data.temp
+    projectData['weather'] = data.weather
+    res.send({message: "POST received"});
+}
+
+
 
 //Post Route that adds the incoming data to projectData
 app.post('/addPlace', addPlaceData);

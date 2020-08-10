@@ -12,13 +12,13 @@ body{
     font-size: 20px;
     font-family: 'Oswald', sans-serif;
 
-    grid-template-rows: 5% 25% 40% 25%;
-    grid-template-columns: 50% 20%;
+    grid-template-rows: 10% 17.5% 17.5% 50%;
 
     grid-template-areas:
-    "title title"
-    "zip last"
-    "feelings last";
+    "title"
+    "place"
+    "date"
+    "trip";
 
     grid-template-rows: repeat(2, 1fr);
 }
@@ -29,15 +29,16 @@ body{
 
 .entry{
     background: rgba(59, 74, 107, .4);
-    grid-area:last;
+    grid-area: trip;
+    outline: 2px solid blue;
 }
 
-.zip{
-    grid-area:zip;
+.place{
+    grid-area:place;
 }
 
-.feel{
-    grid-area: feelings;
+.date{
+    grid-area: date;
 }
 
 .title{
