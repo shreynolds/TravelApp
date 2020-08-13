@@ -30,7 +30,7 @@ function whenClick(){
 
 const getPhoto = async()=>{
     console.log("in get photo")
-    const url = "/all";
+    const url = "http://localhost:3000/all";
     const request = await fetch(url);
     try{
         const data = await(request.json())
@@ -50,7 +50,7 @@ const getPhoto = async()=>{
             else{
                 photoURL = "NA"
             }
-            postData('/addImage', {imageURL: photoURL})
+            postData('http://localhost:3000/addImage', {imageURL: photoURL})
                 
         }
         catch (error){
@@ -63,7 +63,7 @@ const getPhoto = async()=>{
 }
 
 const getWeatherInfo = async() =>{
-    const url = "/all";
+    const url = "http://localhost:3000/all";
     const request = await fetch(url);
     try{
         const allData = await request.json();
@@ -112,7 +112,7 @@ const getWeatherInfo = async() =>{
             catch{
                 description = "NA"
             }
-            postData('/addWeather', {temp: weatherDay.temp, weather: description})
+            postData('http://localhost:3000/addWeather', {temp: weatherDay.temp, weather: description})
         } catch (error) {
             console.log("error", error);
         }
@@ -132,7 +132,7 @@ function getDateInfo(){
     tripDate.setMinutes(todayDate.getMinutes())
     tripDate.setMilliseconds(todayDate.getMilliseconds())
     let difference = Math.round((tripDate - todayDate)/86400000)
-    postData('/addDate', {today: todayDate, trip: tripDate, countdown: difference})
+    postData('http://localhost:3000/addDate', {today: todayDate, trip: tripDate, countdown: difference})
 }
 
 function postPlaceData(data, city){
@@ -141,7 +141,7 @@ function postPlaceData(data, city){
     let long = data.postalCodes[0].lng
     let country = data.postalCodes[0].countryCode
     console.log(country)
-    postData('/addPlace', {lat:lat, long:long, country:country, city: city})
+    postData('http://localhost:3000/addPlace', {lat:lat, long:long, country:country, city: city})
 }
 
 //Converts Kelvin to Farenheit
@@ -166,7 +166,7 @@ const getPlaceInfo = async(link, place, key) =>{
 //Makes a get request to the server side to get the data and add it to the
 //front-end view
 const retreiveData = async()=>{
-    const url = "/all";
+    const url = "http://localhost:3000/all";
     const request = await fetch(url);
     try{
         const allData = await request.json();
@@ -201,6 +201,10 @@ const retreiveData = async()=>{
         if (imageURL != "NA"){
             document.getElementById('cityimg').src=imageURL
         }
+        const text = document.getElementById('entry')
+        console.log(text.classList)
+        text.classList.remove('hidden')
+        console.log(text.classList)
     } catch(error) {
         console.log("error", error);
     }

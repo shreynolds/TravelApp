@@ -10,23 +10,33 @@
             <div class ="holder headline">
                 <h1> Travel App</h1>
             </div>
-            <div class ="holder place">
-                <label for="place">Where are you going? </label>
-                <input type="text" id="place" placeholder="enter destination here">
+            <div class = "holder form">
+                <div class ="holder input place">
+                    <label for="place">Where are you going? </label>
+                    <input type="text" id="place" placeholder="enter destination here">
+                </div>
+                <div class ="holder input date">
+                    <label for="feelings">What day are you leaving?</label>
+                    <input type= "date" id="date" required pattern="\d{4}-\d{2}-\d{2}"></input>
+                </div>
+                <div class = "holder submit">
+                    <button id="generate" type = "submit" onclick = "return Client.whenClick()"> Generate </button>
+                </div>
             </div>
-            <div class ="holder date">
-                <label for="feelings">What day are you leaving?</label>
-                <input type= "date" id="date" required pattern="\d{4}-\d{2}-\d{2}"></input>
-                <button id="generate" type = "submit" onclick = "return Client.whenClick()"> Generate </button>
-            </div>
-            <div class ="holder entry">
-                <div class = "title">Your Upcoming Trip</div>
+            <div id = "entry" class ="holder entry hidden">
                 <div id = "entryHolder">
-                    <div id = "location"> </div> 
-                    <div id = "departure"> </div>
-                    <div id = "countdown"> </div>
-                    <div id = "weather"> </div>
-                    <img id = "cityimg" src = "">
+                    <div class = 'triptitle'>
+                        <h2> Your Upcoming Trip </h2>
+                    </div>
+                    <div class = 'triptext'>
+                        <div id = "location"> </div> 
+                        <div id = "departure"> </div>
+                        <div id = "countdown"> </div>
+                        <div id = "weather"> </div>
+                    </div>
+                    <div class='tripimg'>
+                        <img id = "cityimg" src = "">
+                    </div>
                 </div>
             </div>
         </div>
