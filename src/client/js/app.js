@@ -9,6 +9,8 @@ const weatherbitKey = '&key=0a157980943c4c6f97abaa81a20a174d'
 const pixabayLink = 'https://pixabay.com/api/?image_type=photo&q='
 const pixabayKey = '&key=17847818-c70cb11e4c9b27cb2b0bbea36'
 
+const restCountriesLink = 'https://restcountries.eu/rest/v2/alpha/'
+
 
 function whenClick(){
     let placeElement = document.getElementById('place');
@@ -20,6 +22,7 @@ function whenClick(){
     })
     .then(getDateInfo)
     .then(getWeatherInfo)
+    .then(getCountryInfo)
     .then(getPhoto)
     .then(retreiveData) 
     .then(function(){
@@ -28,20 +31,43 @@ function whenClick(){
     })
 }
 
+const getCountryInfo = async() =>{
+    const url = "http://localhost:3000/all";
+    const request = await fetch(url);
+    try{
+        const data = await (request.json())
+        const country = data.country
+        const url = restCountriesLink + country
+        const result = await fetch(url)
+        try{
+            const countryInfo = await(result.json())
+            const countryName = countryInfo.name
+            const capital = countryInfo.capital
+            const population = countryInfo.population
+            const language = countryInfo.languages[0].name
+            const currency = countryInfo.currencies[0].name
+            postData('http://localhost:3000/addCountryInfo', {name: countryName, capital:capital, population:population, language:language, currency:currency})
+        }
+        catch (e){
+            console.log("error", e)
+        }
+    }
+    catch (error) {
+        console.log("error", error)
+    }
+}
+
 const getPhoto = async()=>{
-    console.log("in get photo")
     const url = "http://localhost:3000/all";
     const request = await fetch(url);
     try{
         const data = await(request.json())
         let place = data.city
         place = place.replace(' ', '+')
-        console.log(place)
         let url2 = pixabayLink + place + pixabayKey
         const result = await fetch(url2)
         try{
             const photos = await result.json()
-            console.log(photos)
             let photoURL = ""
             if (photos.hits.length != 0)
             {
@@ -81,14 +107,11 @@ const getWeatherInfo = async() =>{
                 year = date.getFullYear() + "-"
             }
             const startDate = '2019-' + (date.getMonth()+ 1) + '-' + date.getDate()
-            console.log(startDate)
             date.setDate(date.getDate() + 1)
             const endDate = '2019-' + (date.getMonth() + 1) + '-' + date.getDate()
-            console.log(endDate)
             url = '/weather'
             url = weaterbitHistoryLink + 'start_date=' + startDate + '&end_date=' + endDate + '&lat=' + lat + '&lon=' + long + weatherbitKey;
         }
-        console.log(url)
         const res = await fetch(url, {
             headers: {
                 'Access-Control-Allow-Origin': '*'
@@ -96,16 +119,11 @@ const getWeatherInfo = async() =>{
         })
         try{
             const dat = await res.json();
-            console.log(dat);
             let description = ""
-            console.log(difference)
             if (difference < 0 || difference > 15){
-                console.log("IN")
                 difference = 0
             }
-            console.log(difference)
             const weatherDay = dat.data[difference]
-            console.log(weatherDay)
             try {
                 description = weatherDay.weather.description
             }
@@ -126,7 +144,6 @@ function getDateInfo(){
     let dateElement = document.getElementById('date');
     let dateString = dateElement.value + "T00:00:00"
     let todayDate = new Date();
-    console.log(todayDate)
     let tripDate = new Date(dateString);
     tripDate.setHours(todayDate.getHours())
     tripDate.setMinutes(todayDate.getMinutes())
@@ -136,11 +153,9 @@ function getDateInfo(){
 }
 
 function postPlaceData(data, city){
-    console.log(data)
     let lat = data.postalCodes[0].lat
     let long = data.postalCodes[0].lng
     let country = data.postalCodes[0].countryCode
-    console.log(country)
     postData('http://localhost:3000/addPlace', {lat:lat, long:long, country:country, city: city})
 }
 
@@ -153,7 +168,6 @@ function kelvinToFarenheit(tempK){
 const getPlaceInfo = async(link, place, key) =>{
     place = place.replace(' ', '%20')
     const url = link+place+key;
-    console.log(url)
     const result = await fetch(url);
     try{
         const data = await result.json();
@@ -171,9 +185,9 @@ const retreiveData = async()=>{
     try{
         const allData = await request.json();
         console.log(allData)
-        document.getElementById('location').innerHTML = "Destination: " + allData.city;
+        document.getElementById('location').innerHTML = "<b>Destination: </b>" + allData.city;
         let trip = new Date(allData.tripDate)
-        document.getElementById('departure').innerHTML = "Departure Date: " + trip.toDateString();
+        document.getElementById('departure').innerHTML = "<b>Departure Date:</b> " + trip.toDateString();
         let count = allData.countdown
         let countString = ""
         let weatherString = ""
@@ -193,18 +207,17 @@ const retreiveData = async()=>{
             countString = "This trip is in the past!"
             weatherString = "The average temp was " + allData.temp + "°F"
         }
-        console.log("here!!")
         document.getElementById('countdown').innerHTML = countString
         document.getElementById('weather').innerHTML = weatherString 
         let imageURL = allData.imageURL
-        console.log(imageURL)
         if (imageURL != "NA"){
             document.getElementById('cityimg').src=imageURL
         }
+        const countryInfo = document.getElementById('countryInfo')
+        countryInfo.innerHTML = "<br> <b> Info About " + allData.countryName + "</b> <br> <b>Capital: </b>" + allData.capital + "<br> <b>Population: </b>" + allData.population +
+         "<br> <b>Primary Language: </b>" + allData.language + "<br> <b>Primary Currency: </b>" + allData.currency
         const text = document.getElementById('entry')
-        console.log(text.classList)
         text.classList.remove('hidden')
-        console.log(text.classList)
     } catch(error) {
         console.log("error", error);
     }

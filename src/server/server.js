@@ -79,6 +79,18 @@ function addImageData(req, res){
     res.send({message: "POST received"});
 }
 
+app.post('/addCountryInfo', addCountryData);
+
+function addCountryData(req, res){
+    let data = req.body;
+    projectData['countryName'] = data.name
+    projectData['population'] = data.population
+    projectData['capital'] = data.capital
+    projectData['language'] = data.language
+    projectData['currency'] = data.currency
+    res.send({message: "POST received"});
+}
+
 // Setup Server
 const port = 3000;
 const server = app.listen(port, ()=>{
