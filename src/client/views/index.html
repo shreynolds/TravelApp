@@ -3,7 +3,6 @@
     <head>
         <meta charset="UTF-8">
         <title> Travel App </title>
-        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <div id = "app">
@@ -41,5 +40,14 @@
                 </div>
             </div>
         </div>
+        <script>
+            // Check that service workers are supported
+            if ('serviceWorker' in navigator) {
+                // Use the window load event to keep the page load performant
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/service-worker.js');
+                });
+            }
+           </script>
     </body>
 </html>
