@@ -1,4 +1,4 @@
-projectData = {}
+let projectData = {}
 // Require Express to run server and routes
 const express = require('express');
 // Start up an instance of app
@@ -36,7 +36,11 @@ function send (req, res) {
     res.send(projectData);
 };
 
+app.get('/',function (req,res) {
+    res.status(200).sendFile('dist/index.html');
+});
 
+//Post Route that adds the incoming weather data to projectData
 app.post('/addWeather', addWeatherData)
 
 function addWeatherData(req, res){
@@ -47,8 +51,7 @@ function addWeatherData(req, res){
 }
 
 
-
-//Post Route that adds the incoming data to projectData
+//Post Route that adds the incoming Place data to projectData
 app.post('/addPlace', addPlaceData);
 
 //Function for the Post Route -- adding the data to projectData
@@ -61,6 +64,7 @@ function addPlaceData(req, res){
     res.send({message: "POST received"});
 }
 
+//Post Route that adds the incoming date data to projectData
 app.post('/addDate', addDateData);
 
 function addDateData(req, res){
@@ -71,6 +75,7 @@ function addDateData(req, res){
     res.send({message: "POST received"});
 }
 
+//Post Route that adds the incoming image data to projectData
 app.post('/addImage', addImageData);
 
 function addImageData(req, res){
@@ -79,6 +84,7 @@ function addImageData(req, res){
     res.send({message: "POST received"});
 }
 
+//Post Route that adds the incoming counry data to projectData
 app.post('/addCountryInfo', addCountryData);
 
 function addCountryData(req, res){
@@ -96,3 +102,5 @@ const port = 3000;
 const server = app.listen(port, ()=>{
     console.log(`server running on port ${port}`);
 });
+
+module.exports = app
