@@ -11,7 +11,7 @@ const pixabayKey = '&key=17847818-c70cb11e4c9b27cb2b0bbea36'
 
 const restCountriesLink = 'https://restcountries.eu/rest/v2/alpha/'
 
-
+//Function called when you click Submit -- calls all functions afterwards to get information
 function whenClick(){
     let placeElement = document.getElementById('place');
     let dateElement = document.getElementById('date');
@@ -31,6 +31,7 @@ function whenClick(){
     })
 }
 
+//Gets information about the countries from the rest API, then adds it to the variable on the server side
 const getCountryInfo = async() =>{
     const url = "http://localhost:3000/all";
     const request = await fetch(url);
@@ -57,6 +58,7 @@ const getCountryInfo = async() =>{
     }
 }
 
+//Gets a photo from the pixabay API and adds the link to the server side variable
 const getPhoto = async()=>{
     const url = "http://localhost:3000/all";
     const request = await fetch(url);
@@ -88,6 +90,7 @@ const getPhoto = async()=>{
     }
 }
 
+//Gets weather info from the weatherbit API and pushes the info to the server side variable
 const getWeatherInfo = async() =>{
     const url = "http://localhost:3000/all";
     const request = await fetch(url);
@@ -139,7 +142,7 @@ const getWeatherInfo = async() =>{
     }
 }
 
-
+//Gets information about the Date and Difference and pushes that to the Server Side variable
 function getDateInfo(){
     let dateElement = document.getElementById('date');
     let dateString = dateElement.value + "T00:00:00"
@@ -152,6 +155,7 @@ function getDateInfo(){
     postData('http://localhost:3000/addDate', {today: todayDate, trip: tripDate, countdown: difference})
 }
 
+//Pushes information about the location to the server side variable
 function postPlaceData(data, city){
     let lat = data.postalCodes[0].lat
     let long = data.postalCodes[0].lng
@@ -164,7 +168,7 @@ function kelvinToFarenheit(tempK){
     return Math.round((tempK - 273.15) * 9/5 + 32);
 }
 
-//Makes an async call to the openWeaterMap API to get the weather based on the zip
+//Makes an async call to the geonames API to get information
 const getPlaceInfo = async(link, place, key) =>{
     place = place.replace(' ', '%20')
     const url = link+place+key;
